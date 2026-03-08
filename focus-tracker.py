@@ -28,7 +28,7 @@ audio_process = None
 
 def play_sound():
     global audio_process
-    audio_process = subprocess.Popen(["afplay", "/Users/Emir/Downloads/utkucann.mp3"])
+    audio_process = subprocess.Popen(["afplay", "utkucann.mp3"])
 
 
 def stop_sound():

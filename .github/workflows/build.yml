@@ -1,0 +1,40 @@
+name: Build executables
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build-mac:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install pyinstaller mediapipe opencv-python numpy
+      - run: pyinstaller --windowed --add-data "utkucann.mp3:." focus_tracker.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mac-app
+          path: dist/
+
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install pyinstaller mediapipe opencv-python numpy
+      - run: pyinstaller --onefile --add-data "utkucann.mp3;." focus_tracker.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-exe
+          path: dist/
