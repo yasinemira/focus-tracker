@@ -26,7 +26,6 @@ playing = False
 not_looking_start = None
 audio_process = None
 
-
 def play_sound():
     global audio_process
     audio_process = subprocess.Popen(["afplay", "/Users/Emir/Downloads/utkucann.mp3"])
@@ -68,9 +67,7 @@ def draw_eye_box(indices, landmarks, frame, w, h):
         2
     )
 
-
 def draw_gaze_line(iris, eye_left, eye_right, frame, color):
-
     eye_center = (
         int((eye_left[0] + eye_right[0]) / 2),
         int((eye_left[1] + eye_right[1]) / 2)
@@ -91,8 +88,7 @@ def draw_gaze_line(iris, eye_left, eye_right, frame, color):
     return end_point
 
 
-while True:
-
+while True: # Uygulamayi kapatana kadar calistir.
     ret, frame = cap.read()
     if not ret:
         break
@@ -105,7 +101,6 @@ while True:
     looking = False
 
     if results.multi_face_landmarks:
-
         landmarks = results.multi_face_landmarks[0].landmark
 
         draw_eye_box(LEFT_EYE_BOX, landmarks, frame, w, h)
@@ -145,38 +140,30 @@ while True:
         history.append(score)
         smooth_score = np.mean(history)
 
-        if smooth_score < 0.4:
+        if smooth_score < 0.4: # Takip hassasiyeti üstünde oynanabilir.
             looking = True
 
     if not looking:
-
         if not_looking_start is None:
             not_looking_start = time.time()
-
         elapsed = time.time() - not_looking_start
 
         if elapsed > 1.5:
-
             if not playing:
                 play_sound()
                 playing = True
 
     else:
-
         not_looking_start = None
-
         if playing:
             stop_sound()
             playing = False
 
 
     if playing:
-
         text = "YINE DDDEE ASK BOYUN EEEGMEEEZZZ"
-
         mid_x = int((left_iris[0] + right_iris[0]) / 2)
         mid_y = int((left_iris[1] + right_iris[1]) / 2) - 30
-
         shake_x = random.randint(-10,10)
         shake_y = random.randint(-10,10)
 
@@ -191,7 +178,6 @@ while True:
         )
 
     else:
-
         cv2.putText(frame,"OK",(30,50),
                     cv2.FONT_HERSHEY_SIMPLEX,1,(0,255,0),2)
 
@@ -199,7 +185,6 @@ while True:
 
     if cv2.waitKey(1) & 0xFF == 27:
         break
-
 
 cap.release()
 cv2.destroyAllWindows()
